@@ -15,35 +15,35 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonProperty.Access;
 
 @Entity
-@Table(name = User.TABLE_NAME)
+@Table(name = User.TABLE_NAME) // ou name = "user"
 
 public class User {
-    public interface  CreateUser {}
-    public interface UpdateUser {}
+    public interface  CreateUser {} // acho q serve pra enviar as excessões qnd o usuario cria a conta
+    public interface UpdateUser {} // msm coisa mas pra qnd da update creio
 
     public static final String TABLE_NAME = "user";
     
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", unique = true)
+    @GeneratedValue(strategy = GenerationType.IDENTITY) //serve pra dizer ao sql q é tipo um auto increment
+    @Column(name = "id", unique = true) // cria a coluna | unique garante que sera unico
     private Long id;
 
-    @Column(name = "username", length = 100, nullable = false, unique = true)
-    @NotNull(groups = CreateUser.class)
-    @NotEmpty(groups = CreateUser.class)
+    @Column(name = "username", length = 100, nullable = false, unique = true) // esse nullable serve pra criar o banco de dados, qnd ficar null da erro de banco
+    @NotNull(groups = CreateUser.class) // aqui serve pro spring dar o erro explicando
+    @NotEmpty(groups = CreateUser.class) // garante que não é uma string vazia
     @Size(groups = CreateUser.class, min=2, max = 100)
     private String username;
 
-    @JsonProperty(access = Access.WRITE_ONLY)
+    @JsonProperty(access = Access.WRITE_ONLY) // serve para garantir que a senha só vai escrever, não retorna nada
     @Column(name = "password", length = 60, nullable = false)
-    @NotNull(groups = CreateUser.class)
-    @NotEmpty(groups = CreateUser.class)
-    @Size(groups = CreateUser.class,min = 8, max = 60)
+    @NotNull(groups = {CreateUser.class, UpdateUser.class})
+    @NotEmpty(groups = {CreateUser.class, UpdateUser.class})
+    @Size(groups = {CreateUser.class, UpdateUser.class},min = 8, max = 60)
     private String password;
 
     //private List<Task> tasks = new ArrayList<Task>();
 
-    public User() {
+    public User() { // o spring utiliza construtores vazios
     }
 
     public User(Long id, String username, String password) {
