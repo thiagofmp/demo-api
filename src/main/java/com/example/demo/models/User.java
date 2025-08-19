@@ -5,10 +5,14 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -41,7 +45,8 @@ public class User {
     @Size(groups = {CreateUser.class, UpdateUser.class},min = 8, max = 60)
     private String password;
 
-    //private List<Task> tasks = new ArrayList<Task>();
+    @OneToMany(mappedBy = "user") // quer dizer q a variavel user em Task.java que mapeia isso
+    private List<Task> tasks = new ArrayList<Task>();
 
     public User() { // o spring utiliza construtores vazios
     }
@@ -76,6 +81,13 @@ public class User {
         this.password = password;
     }
 
+    public List<Task> getTasks() {
+        return this.tasks;
+    }
+
+    public void setTasks(List<Task> tasks) {
+        this.tasks = tasks;
+    }
     
     @Override
     public boolean equals(Object obj){
