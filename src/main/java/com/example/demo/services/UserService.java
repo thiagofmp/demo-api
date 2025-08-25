@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.models.User;
-import com.example.demo.repositories.TaskRepository;
 import com.example.demo.repositories.UserRepository;
 
 
@@ -17,8 +16,6 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
-    @Autowired
-    private TaskRepository taskRepository;
 
     public User findById(Long id){
         Optional<User> user = this.userRepository.findById(id); //esse optional serve pra evitar erro caso o usuario não exista no banco
@@ -32,7 +29,6 @@ public class UserService {
     public User create(User obj) {
         obj.setId(null); // se n fizer isso pode atualizar o id do usuario no banco
         obj = this.userRepository.save(obj);
-        this.taskRepository.saveAll(obj.getTasks());
         return obj;
     }
 
