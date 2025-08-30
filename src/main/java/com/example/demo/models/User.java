@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonProperty.Access;
 
@@ -81,6 +82,7 @@ public class User {
         this.password = password;
     }
 
+    @JsonIgnore // serve pra q nem todos os dados sejam carregados no front
     public List<Task> getTasks() {
         return this.tasks;
     }
